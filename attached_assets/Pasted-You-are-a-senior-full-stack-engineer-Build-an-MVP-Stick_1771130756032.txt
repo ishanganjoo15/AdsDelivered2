@@ -1,0 +1,137 @@
+You are a senior full-stack engineer. Build an MVP “Sticker Campaign Manager” platform.
+
+Goal
+A web app where an advertiser can:
+1) Upload a creative (ad image for sticker)
+2) Select a city to run the campaign
+3) Select duration from a calendar (start date + end date, show number of days)
+4) Click “Launch Campaign”
+After launch, the campaign is stored, status changes to LIVE, and an internal summary page shows campaign details.
+
+Tech stack (mandatory)
+- Backend: Python FastAPI
+- Database: Postgres
+- ORM: SQLAlchemy + Alembic migrations
+- Storage for creative image: local filesystem for dev (./uploads) AND support switching to S3 later (create an abstraction layer)
+- Frontend: Next.js (App Router) + TypeScript
+- UI: Tailwind CSS
+- Auth: simple email + password (advertiser accounts), using JWT for sessions (keep it minimal)
+- Dev environment: Docker Compose for Postgres + backend + frontend
+
+Scope (MVP)
+A) Advertiser can sign up / login
+B) Advertiser can create a campaign:
+   - Name (string)
+   - Creative upload (png/jpg/webp, max 10MB)
+   - City (dropdown; start with: Bengaluru, Mumbai, Delhi, Hyderabad, Chennai)
+   - Start date and end date (calendar picker)
+   - Automatically compute duration_days = (end_date - start_date + 1)
+   - Button: “Launch Campaign”
+   - On launch: validate inputs, store campaign, set status to LIVE, persist creative file + URL.
+C) Advertiser dashboard:
+   - List campaigns (name, city, start/end, duration_days, status, created_at)
+   - Campaign details page showing creative preview + all fields
+D) Basic admin view (no separate login needed for now):
+   - /admin/campaigns shows all campaigns and can change status (LIVE/PAUSED/ENDED)
+E) Audit logging:
+   - Record events for create and status changes (who + when + what)
+
+Database schema (required)
+Create tables:
+1) users
+   - id (uuid pk)
+   - email (unique)
+   - password_hash
+   - role (enum: ADVERTISER, ADMIN) default ADVERTISER
+   - created_at, updated_at
+2) campaigns
+   - id (uuid pk)
+   - user_id (fk users)
+   - name
+   - city (enum or text constrained)
+   - start_date (date)
+   - end_date (date)
+   - duration_days (int)
+   - creative_original_filename
+   - creative_storage_path (for dev local path)
+   - creative_url (served url)
+   - status (enum: DRAFT, LIVE, PAUSED, ENDED) default DRAFT
+   - launched_at (timestamp nullable)
+   - created_at, updated_at
+3) campaign_events
+   - id (uuid pk)
+   - campaign_id (fk campaigns)
+   - actor_user_id (fk users)
+   - event_type (enum: CREATED, LAUNCHED, STATUS_CHANGED, CREATIVE_UPLOADED)
+   - event_data (jsonb)
+   - created_at
+
+Backend API requirements
+- POST /auth/signup {email,password}
+- POST /auth/login {email,password} -> {token}
+- GET /me
+- POST /campaigns (multipart form: name, city, start_date, end_date, creative file) 
+  - Create as DRAFT, upload creative, log events
+- POST /campaigns/{id}/launch
+  - Validate campaign belongs to user, has creative, dates valid; set status LIVE; set launched_at; log event
+- GET /campaigns (list my campaigns)
+- GET /campaigns/{id} (detail)
+- PATCH /admin/campaigns/{id}/status {status}
+  - Only ADMIN role; log event
+- Static file serving for uploaded creatives in dev: /uploads/{filename}
+
+Validation rules
+- creative file required before launch
+- file type must be image
+- max size 10MB
+- city must be one of allowed list
+- start_date >= today
+- end_date >= start_date
+- duration_days computed server-side; frontend displays it too
+- A user can only access their own campaigns (except admin)
+
+Frontend pages (required)
+- /signup, /login
+- /dashboard (campaign list + “Create Campaign” button)
+- /campaigns/new (form with file upload + city dropdown + date range picker + computed duration + Save Draft + Launch Campaign)
+- /campaigns/[id] (detail page with image preview)
+- /admin/campaigns (table + status dropdown) — only if user role is ADMIN; otherwise show 403 page
+
+UI/UX requirements
+- Clean, minimal admin-like UI
+- “Launch Campaign” should show a confirmation modal: “Launch campaign in {city} for {X} days?”
+- Show loading + error states
+- On successful launch, route to campaign detail page with status LIVE badge
+
+Project structure
+- backend/ (FastAPI app)
+- frontend/ (Next.js)
+- docker-compose.yml at root
+- README.md with step-by-step run instructions
+
+Deliverables
+1) All source code for backend + frontend + docker compose
+2) Alembic migrations included
+3) Seed script: create an admin user (admin@example.com / password) for local dev
+4) Basic tests (at least 3):
+   - signup/login works
+   - create draft campaign works
+   - launch campaign sets LIVE and logs event
+
+Implementation details
+- Use bcrypt for password hashing
+- Use pydantic schemas for request/response
+- Use SQLAlchemy 2.0 style
+- Use environment variables for DB URL and JWT secret
+- Write code that actually runs without placeholders
+
+Important
+- Do NOT over-engineer. Keep it monolith.
+- Focus on correctness + shipping.
+- If you must choose: prioritize backend correctness and a working UI over fancy styling.
+
+Now produce:
+A) The full folder tree
+B) The exact code for each file
+C) Commands to run locally
+D) Any notes on how the pieces connect
