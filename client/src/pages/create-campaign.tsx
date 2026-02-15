@@ -248,7 +248,7 @@ export default function CreateCampaign() {
               </div>
 
               <div className="space-y-3">
-                <FormLabel>Creative Asset</FormLabel>
+                <Label>Creative Asset</Label>
                 <div className="border-2 border-dashed rounded-lg p-6 hover:bg-muted/50 transition-colors text-center cursor-pointer relative overflow-hidden group">
                   <Input 
                     type="file" 
