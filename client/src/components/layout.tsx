@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, PlusCircle, Settings, LogOut, Shield } from "lucide-react";
+import { LayoutDashboard, PlusCircle, Settings, LogOut, Shield, Printer, Wallet } from "lucide-react";
 
 export function Sidebar() {
   const [location] = useLocation();
@@ -9,6 +9,8 @@ export function Sidebar() {
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { href: "/campaigns/new", label: "New Campaign", icon: PlusCircle },
     { href: "/admin", label: "Admin View", icon: Shield },
+    { href: "/vendor", label: "Vendor Queue", icon: Printer },
+    { href: "/partner", label: "Partner Earnings", icon: Wallet },
   ];
 
   return (
