@@ -7,7 +7,7 @@ import { Download, Printer, Scissors, Ruler, Info } from "lucide-react";
 import { format } from "date-fns";
 
 export default function VendorPage() {
-  const campaigns = useCampaignStore((state) => state.campaigns.filter(c => c.status === "LIVE"));
+  const campaigns = useCampaignStore((state) => state.campaigns).filter(c => c.status === "LIVE");
 
   return (
     <Layout>

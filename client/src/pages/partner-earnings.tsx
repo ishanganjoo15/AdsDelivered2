@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { TrendingUp, Wallet, ShoppingBag, ArrowUpRight } from "lucide-react";
 
 export default function DeliveryPartnerPage() {
-  const campaigns = useCampaignStore((state) => state.campaigns.filter(c => c.status === "LIVE"));
+  const campaigns = useCampaignStore((state) => state.campaigns).filter(c => c.status === "LIVE");
   
   // Mock commission calculations
   const totalCommission = campaigns.reduce((acc, c) => acc + (c.durationDays * 12.5), 0);
