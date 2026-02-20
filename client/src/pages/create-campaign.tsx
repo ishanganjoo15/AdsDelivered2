@@ -44,10 +44,12 @@ import { CalendarIcon, UploadCloud, Rocket, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const CITIES = ["Bengaluru", "Mumbai", "Delhi", "Hyderabad", "Chennai"];
+const PARTNERS = ["Swiggy", "Zomato", "Flipkart", "Amazon", "Blinkit", "Dunzo"];
 
 const formSchema = z.object({
   name: z.string().min(3, "Campaign name must be at least 3 characters"),
   city: z.string().min(1, "Please select a city"),
+  partner: z.string().min(1, "Please select a delivery partner"),
   dateRange: z.object({
     from: z.date(),
     to: z.date(),
@@ -69,6 +71,7 @@ export default function CreateCampaign() {
     defaultValues: {
       name: "",
       city: "",
+      partner: "",
     },
   });
 
@@ -118,6 +121,7 @@ export default function CreateCampaign() {
       id: Math.random().toString(36).substr(2, 9),
       name: pendingData.name,
       city: pendingData.city,
+      deliveryPartner: pendingData.partner,
       startDate: startDate.toISOString(),
       endDate: endDate.toISOString(),
       durationDays,
@@ -188,6 +192,31 @@ export default function CreateCampaign() {
                           {CITIES.map((city) => (
                             <SelectItem key={city} value={city}>
                               {city}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="partner"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Delivery Partner</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select partner" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {PARTNERS.map((partner) => (
+                            <SelectItem key={partner} value={partner}>
+                              {partner}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -311,6 +340,10 @@ export default function CreateCampaign() {
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">City:</span>
                   <span className="font-medium">{pendingData.city}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Partner:</span>
+                  <span className="font-medium">{pendingData.partner}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Duration:</span>

@@ -9,6 +9,7 @@ export interface Campaign {
   endDate: string;
   durationDays: number;
   creativeUrl: string;
+  deliveryPartner?: string;
   status: "DRAFT" | "LIVE" | "PAUSED" | "ENDED";
   createdAt: string;
   launchedAt?: string;
