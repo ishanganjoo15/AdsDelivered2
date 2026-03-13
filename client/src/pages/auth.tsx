@@ -3,13 +3,17 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
+import { useCampaignStore } from "@/lib/store";
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [, setLocation] = useLocation();
+  const setCurrentUserRole = useCampaignStore(state => state.setCurrentUserRole);
+  const currentUserRole = useCampaignStore(state => state.currentUserRole);
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,7 +21,10 @@ export default function AuthPage() {
     // Simulate auth delay
     setTimeout(() => {
       setIsLoading(false);
-      setLocation("/dashboard");
+      if (currentUserRole === "Advertiser") setLocation("/dashboard");
+      else if (currentUserRole === "Print Vendor") setLocation("/vendor");
+      else if (currentUserRole === "Delivery Partner") setLocation("/dashboard");
+      else if (currentUserRole === "Admin") setLocation("/admin");
     }, 1000);
   };
 
@@ -37,6 +44,20 @@ export default function AuthPage() {
         <CardContent>
           <form onSubmit={handleAuth} className="space-y-4">
             <div className="space-y-2">
+              <Label htmlFor="role">Login Role</Label>
+              <Select value={currentUserRole} onValueChange={(val: any) => setCurrentUserRole(val)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Advertiser">Advertiser Login</SelectItem>
+                  <SelectItem value="Print Vendor">Print Vendor Login</SelectItem>
+                  <SelectItem value="Delivery Partner">Delivery Partner Login</SelectItem>
+                  <SelectItem value="Admin">Admin Login</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
@@ -44,7 +65,13 @@ export default function AuthPage() {
                 placeholder="m@example.com"
                 required
                 className="bg-background"
-                defaultValue="advertiser@demo.com"
+                value={
+                  currentUserRole === "Advertiser" ? "advertiser@demo.com" :
+                  currentUserRole === "Print Vendor" ? "vendor@demo.com" :
+                  currentUserRole === "Delivery Partner" ? "partner@demo.com" :
+                  "admin@demo.com"
+                }
+                onChange={() => {}}
               />
             </div>
             <div className="space-y-2">

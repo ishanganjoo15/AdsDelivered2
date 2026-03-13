@@ -17,9 +17,11 @@ export interface Campaign {
 
 interface CampaignState {
   campaigns: Campaign[];
+  currentUserRole: "Advertiser" | "Print Vendor" | "Delivery Partner" | "Admin";
   addCampaign: (campaign: Campaign) => void;
   updateCampaignStatus: (id: string, status: Campaign["status"]) => void;
   getCampaign: (id: string) => Campaign | undefined;
+  setCurrentUserRole: (role: "Advertiser" | "Print Vendor" | "Delivery Partner" | "Admin") => void;
 }
 
 export const useCampaignStore = create<CampaignState>()(
@@ -50,6 +52,7 @@ export const useCampaignStore = create<CampaignState>()(
           createdAt: "2024-02-20T14:30:00Z",
         }
       ],
+      currentUserRole: "Advertiser",
       addCampaign: (campaign) =>
         set((state) => ({ campaigns: [...state.campaigns, campaign] })),
       updateCampaignStatus: (id, status) =>
@@ -59,6 +62,7 @@ export const useCampaignStore = create<CampaignState>()(
           ),
         })),
       getCampaign: (id) => get().campaigns.find((c) => c.id === id),
+      setCurrentUserRole: (role) => set({ currentUserRole: role }),
     }),
     {
       name: "campaign-storage",

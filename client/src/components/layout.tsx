@@ -1,17 +1,21 @@
 import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { LayoutDashboard, PlusCircle, Settings, LogOut, Shield, Printer, Wallet } from "lucide-react";
+import { useCampaignStore } from "@/lib/store";
 
 export function Sidebar() {
   const [location] = useLocation();
+  const currentUserRole = useCampaignStore(state => state.currentUserRole);
 
-  const links = [
-    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { href: "/campaigns/new", label: "New Campaign", icon: PlusCircle },
-    { href: "/admin", label: "Admin View", icon: Shield },
-    { href: "/vendor", label: "Vendor Queue", icon: Printer },
-    { href: "/partner", label: "Partner Earnings", icon: Wallet },
+  const allLinks = [
+    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ["Advertiser", "Delivery Partner", "Admin"] },
+    { href: "/campaigns/new", label: "New Campaign", icon: PlusCircle, roles: ["Advertiser", "Admin"] },
+    { href: "/admin", label: "Admin View", icon: Shield, roles: ["Admin"] },
+    { href: "/vendor", label: "Vendor Queue", icon: Printer, roles: ["Print Vendor", "Admin"] },
+    { href: "/partner", label: "Partner Earnings", icon: Wallet, roles: ["Delivery Partner", "Admin"] },
   ];
+
+  const links = allLinks.filter(link => link.roles.includes(currentUserRole));
 
   return (
     <div className="flex h-screen w-64 flex-col border-r bg-sidebar text-sidebar-foreground">
@@ -49,11 +53,16 @@ export function Sidebar() {
       <div className="border-t p-4">
         <div className="flex items-center gap-3 mb-4 px-2">
           <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xs font-bold">
-            AD
+            {currentUserRole.substring(0, 2).toUpperCase()}
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-medium">Advertiser</span>
-            <span className="text-xs text-muted-foreground">demo@ad.com</span>
+            <span className="text-sm font-medium">{currentUserRole}</span>
+            <span className="text-xs text-muted-foreground">
+              {currentUserRole === "Advertiser" ? "advertiser@demo.com" :
+               currentUserRole === "Print Vendor" ? "vendor@demo.com" :
+               currentUserRole === "Delivery Partner" ? "partner@demo.com" :
+               "admin@demo.com"}
+            </span>
           </div>
         </div>
         <Link href="/login">
