@@ -28,6 +28,9 @@ export default function AuthPage() {
     }, 1000);
   };
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50/50 p-4">
       <Card className="w-full max-w-md shadow-lg border-primary/10">
@@ -65,13 +68,8 @@ export default function AuthPage() {
                 placeholder="m@example.com"
                 required
                 className="bg-background"
-                value={
-                  currentUserRole === "Advertiser" ? "adv@adsdelivered.com" :
-                  currentUserRole === "Print Vendor" ? "print@adsdelivered.com" :
-                  currentUserRole === "Delivery Channel" ? "channel@adsdelivered.com" :
-                  "admin@adsdelivered.com"
-                }
-                onChange={() => {}}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="space-y-2">
@@ -81,13 +79,8 @@ export default function AuthPage() {
                 type="password" 
                 required 
                 className="bg-background" 
-                value={
-                  currentUserRole === "Advertiser" ? "advpass123" :
-                  currentUserRole === "Print Vendor" ? "printpass123" :
-                  currentUserRole === "Delivery Channel" ? "channelpass123" :
-                  "adminpass123"
-                }
-                onChange={() => {}}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             <Button className="w-full" type="submit" disabled={isLoading}>

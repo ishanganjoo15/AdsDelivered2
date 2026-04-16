@@ -45,7 +45,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 
 const CITIES = ["Bengaluru", "Mumbai", "Delhi", "Hyderabad", "Chennai"];
-const PARTNERS = ["Slay Coffee","Samosa Party","Potful","FreshMenu","Truffles","Boat","Mamaearth","Wakefit","Licious","Blue Tokai","Sugar Cosmetics","Wow Skin Science","The Man Company","Bombay Shaving Company","Snitch","Reliance Smart","More Retail","Spar India","Reliance Trends","Pantaloons","Dunzo","Porter","Shadowfax","Delhivery","Xpressbees","Flipkart","Amazon India","Meesho","Nykaa","Myntra","ITC","HUL","Tata Consumer","Britannia","Nestle India","Zepto","Blinkit","Swiggy","Zomato","WeWork India","Awfis","OYO","Treebo","Urban Company","NoBroker","MagicBricks","Housing.com","Rapido","Ola","Uber India"];
+const PARTNERS = ["Slay Coffee","Samosa Party","Potful","FreshMenu","Truffles","Boat","Mamaearth","Wakefit","Licious","Blue Tokai","Sugar Cosmetics","Wow Skin Science","The Man Company","Bombay Shaving Company","Snitch","Reliance Smart","More Retail","Spar India","Reliance Trends","Pantaloons","Dunzo","Porter","Shadowfax","Delhivery","Xpressbees","Flipkart","Amazon India","Meesho","Nykaa","Myntra","ITC","HUL","Tata Consumer","Britannia","Nestle India","Zepto","Blinkit","Swiggy","Zomato","WeWork India","Awfis","OYO","Treebo","Urban Company","NoBroker","MagicBricks","Housing.com","Rapido","Ola","Uber India"].sort((a, b) => a.localeCompare(b));
 
 const formSchema = z.object({
   name: z.string().min(3, "Campaign name must be at least 3 characters"),
