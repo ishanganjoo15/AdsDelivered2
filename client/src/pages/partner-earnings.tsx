@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { TrendingUp, Wallet, ShoppingBag, ArrowUpRight } from "lucide-react";
 
-export default function DeliveryPartnerPage() {
+export default function DeliveryChannelPage() {
   const campaigns = useCampaignStore((state) => state.campaigns).filter(c => c.status === "LIVE");
   
   // Mock commission calculations
@@ -15,7 +15,7 @@ export default function DeliveryPartnerPage() {
   return (
     <Layout>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">Partner Earnings</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Channel Earnings</h1>
         <p className="text-muted-foreground mt-1">Overview of commissions earned from paper bag sticker placements.</p>
       </div>
 

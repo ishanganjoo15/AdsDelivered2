@@ -23,7 +23,7 @@ export default function AuthPage() {
       setIsLoading(false);
       if (currentUserRole === "Advertiser") setLocation("/dashboard");
       else if (currentUserRole === "Print Vendor") setLocation("/vendor");
-      else if (currentUserRole === "Delivery Partner") setLocation("/dashboard");
+      else if (currentUserRole === "Delivery Channel") setLocation("/dashboard");
       else if (currentUserRole === "Admin") setLocation("/admin");
     }, 1000);
   };
@@ -52,7 +52,7 @@ export default function AuthPage() {
                 <SelectContent>
                   <SelectItem value="Advertiser">Advertiser Login</SelectItem>
                   <SelectItem value="Print Vendor">Print Vendor Login</SelectItem>
-                  <SelectItem value="Delivery Partner">Delivery Partner Login</SelectItem>
+                  <SelectItem value="Delivery Channel">Delivery Channel Login</SelectItem>
                   <SelectItem value="Admin">Admin Login</SelectItem>
                 </SelectContent>
               </Select>
@@ -66,10 +66,10 @@ export default function AuthPage() {
                 required
                 className="bg-background"
                 value={
-                  currentUserRole === "Advertiser" ? "advertiser@demo.com" :
-                  currentUserRole === "Print Vendor" ? "vendor@demo.com" :
-                  currentUserRole === "Delivery Partner" ? "partner@demo.com" :
-                  "admin@demo.com"
+                  currentUserRole === "Advertiser" ? "adv@adsdelivered.com" :
+                  currentUserRole === "Print Vendor" ? "print@adsdelivered.com" :
+                  currentUserRole === "Delivery Channel" ? "channel@adsdelivered.com" :
+                  "admin@adsdelivered.com"
                 }
                 onChange={() => {}}
               />
@@ -81,7 +81,13 @@ export default function AuthPage() {
                 type="password" 
                 required 
                 className="bg-background" 
-                defaultValue="password123"
+                value={
+                  currentUserRole === "Advertiser" ? "advpass123" :
+                  currentUserRole === "Print Vendor" ? "printpass123" :
+                  currentUserRole === "Delivery Channel" ? "channelpass123" :
+                  "adminpass123"
+                }
+                onChange={() => {}}
               />
             </div>
             <Button className="w-full" type="submit" disabled={isLoading}>

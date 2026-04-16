@@ -17,11 +17,11 @@ export interface Campaign {
 
 interface CampaignState {
   campaigns: Campaign[];
-  currentUserRole: "Advertiser" | "Print Vendor" | "Delivery Partner" | "Admin";
+  currentUserRole: "Advertiser" | "Print Vendor" | "Delivery Channel" | "Admin";
   addCampaign: (campaign: Campaign) => void;
   updateCampaignStatus: (id: string, status: Campaign["status"]) => void;
   getCampaign: (id: string) => Campaign | undefined;
-  setCurrentUserRole: (role: "Advertiser" | "Print Vendor" | "Delivery Partner" | "Admin") => void;
+  setCurrentUserRole: (role: "Advertiser" | "Print Vendor" | "Delivery Channel" | "Admin") => void;
 }
 
 export const useCampaignStore = create<CampaignState>()(

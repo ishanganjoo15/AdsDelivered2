@@ -8,11 +8,11 @@ export function Sidebar() {
   const currentUserRole = useCampaignStore(state => state.currentUserRole);
 
   const allLinks = [
-    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ["Advertiser", "Delivery Partner", "Admin"] },
+    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ["Advertiser", "Delivery Channel", "Admin"] },
     { href: "/campaigns/new", label: "New Campaign", icon: PlusCircle, roles: ["Advertiser", "Admin"] },
     { href: "/admin", label: "Admin View", icon: Shield, roles: ["Admin"] },
     { href: "/vendor", label: "Vendor Queue", icon: Printer, roles: ["Print Vendor", "Admin"] },
-    { href: "/partner", label: "Partner Earnings", icon: Wallet, roles: ["Delivery Partner", "Admin"] },
+    { href: "/partner", label: "Channel Earnings", icon: Wallet, roles: ["Delivery Channel", "Admin"] },
   ];
 
   const links = allLinks.filter(link => link.roles.includes(currentUserRole));
@@ -24,7 +24,7 @@ export function Sidebar() {
           <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground">
             S
           </div>
-          StickerMgr
+          AdsDelivered
         </h1>
       </div>
       
@@ -58,10 +58,10 @@ export function Sidebar() {
           <div className="flex flex-col">
             <span className="text-sm font-medium">{currentUserRole}</span>
             <span className="text-xs text-muted-foreground">
-              {currentUserRole === "Advertiser" ? "advertiser@demo.com" :
-               currentUserRole === "Print Vendor" ? "vendor@demo.com" :
-               currentUserRole === "Delivery Partner" ? "partner@demo.com" :
-               "admin@demo.com"}
+              {currentUserRole === "Advertiser" ? "adv@adsdelivered.com" :
+               currentUserRole === "Print Vendor" ? "print@adsdelivered.com" :
+               currentUserRole === "Delivery Channel" ? "channel@adsdelivered.com" :
+               "admin@adsdelivered.com"}
             </span>
           </div>
         </div>

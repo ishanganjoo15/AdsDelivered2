@@ -27,11 +27,13 @@ export default function Dashboard() {
           <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
           <p className="text-muted-foreground mt-1">Manage your active sticker campaigns.</p>
         </div>
-        <Link href="/campaigns/new">
-          <Button className="gap-2">
-            <Plus className="h-4 w-4" /> Create Campaign
-          </Button>
-        </Link>
+        {useCampaignStore(state => state.currentUserRole) !== "Delivery Channel" && (
+          <Link href="/campaigns/new">
+            <Button className="gap-2">
+              <Plus className="h-4 w-4" /> Create Campaign
+            </Button>
+          </Link>
+        )}
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -79,9 +81,11 @@ export default function Dashboard() {
       {campaigns.length === 0 && (
         <div className="flex flex-col items-center justify-center h-64 border-2 border-dashed rounded-lg bg-muted/30">
           <p className="text-muted-foreground mb-4">No campaigns found</p>
-          <Link href="/campaigns/new">
-            <Button variant="outline">Create your first campaign</Button>
-          </Link>
+          {useCampaignStore(state => state.currentUserRole) !== "Delivery Channel" && (
+            <Link href="/campaigns/new">
+              <Button variant="outline">Create your first campaign</Button>
+            </Link>
+          )}
         </div>
       )}
     </Layout>

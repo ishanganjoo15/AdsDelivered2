@@ -10,7 +10,7 @@ import CreateCampaign from "@/pages/create-campaign";
 import CampaignDetails from "@/pages/campaign-details";
 import AdminPage from "@/pages/admin";
 import VendorPage from "@/pages/vendor";
-import DeliveryPartnerPage from "@/pages/partner-earnings";
+import DeliveryChannelPage from "@/pages/partner-earnings";
 import { useEffect } from "react";
 
 function Router() {
@@ -32,7 +32,7 @@ function Router() {
       <Route path="/campaigns/:id" component={CampaignDetails} />
       <Route path="/admin" component={AdminPage} />
       <Route path="/vendor" component={VendorPage} />
-      <Route path="/partner" component={DeliveryPartnerPage} />
+      <Route path="/partner" component={DeliveryChannelPage} />
       <Route component={NotFound} />
     </Switch>
   );

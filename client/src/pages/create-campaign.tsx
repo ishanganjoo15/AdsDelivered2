@@ -40,16 +40,17 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { format, differenceInDays, addDays } from "date-fns";
-import { CalendarIcon, UploadCloud, Rocket, Loader2 } from "lucide-react";
+import { CalendarIcon, UploadCloud, Rocket, Loader2, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Badge } from "@/components/ui/badge";
 
 const CITIES = ["Bengaluru", "Mumbai", "Delhi", "Hyderabad", "Chennai"];
-const PARTNERS = ["Swiggy", "Zomato", "Flipkart", "Amazon", "Blinkit", "Dunzo"];
+const PARTNERS = ["Slay Coffee","Samosa Party","Potful","FreshMenu","Truffles","Boat","Mamaearth","Wakefit","Licious","Blue Tokai","Sugar Cosmetics","Wow Skin Science","The Man Company","Bombay Shaving Company","Snitch","Reliance Smart","More Retail","Spar India","Reliance Trends","Pantaloons","Dunzo","Porter","Shadowfax","Delhivery","Xpressbees","Flipkart","Amazon India","Meesho","Nykaa","Myntra","ITC","HUL","Tata Consumer","Britannia","Nestle India","Zepto","Blinkit","Swiggy","Zomato","WeWork India","Awfis","OYO","Treebo","Urban Company","NoBroker","MagicBricks","Housing.com","Rapido","Ola","Uber India"];
 
 const formSchema = z.object({
   name: z.string().min(3, "Campaign name must be at least 3 characters"),
   city: z.string().min(1, "Please select a city"),
-  partner: z.string().min(1, "Please select a delivery partner"),
+  partners: z.array(z.string()).min(1, "Please select at least one delivery channel"),
   dateRange: z.object({
     from: z.date(),
     to: z.date(),
@@ -71,7 +72,7 @@ export default function CreateCampaign() {
     defaultValues: {
       name: "",
       city: "",
-      partner: "",
+      partners: [],
     },
   });
 
@@ -121,7 +122,7 @@ export default function CreateCampaign() {
       id: Math.random().toString(36).substr(2, 9),
       name: pendingData.name,
       city: pendingData.city,
-      deliveryPartner: pendingData.partner,
+      deliveryPartner: pendingData.partners.join(", "),
       startDate: startDate.toISOString(),
       endDate: endDate.toISOString(),
       durationDays,
@@ -203,24 +204,60 @@ export default function CreateCampaign() {
 
                 <FormField
                   control={form.control}
-                  name="partner"
+                  name="partners"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Delivery Partner</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select partner" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {PARTNERS.map((partner) => (
-                            <SelectItem key={partner} value={partner}>
-                              {partner}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <FormLabel>Delivery Channels</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              className={cn(
+                                "w-full justify-between",
+                                !field.value?.length && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value?.length > 0
+                                ? `${field.value.length} selected`
+                                : "Select channels"}
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[200px] p-0" align="start">
+                          <div className="max-h-[300px] overflow-y-auto p-1">
+                            {PARTNERS.map((partner) => (
+                              <div
+                                key={partner}
+                                className={cn(
+                                  "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground",
+                                  field.value?.includes(partner) && "bg-accent text-accent-foreground font-medium"
+                                )}
+                                onClick={() => {
+                                  const current = field.value || [];
+                                  const updated = current.includes(partner)
+                                    ? current.filter(p => p !== partner)
+                                    : [...current, partner];
+                                  field.onChange(updated);
+                                }}
+                              >
+                                {partner}
+                                {field.value?.includes(partner) && (
+                                  <Check className="ml-auto h-4 w-4" />
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </PopoverContent>
+                      </Popover>
+                      <div className="flex flex-wrap gap-1 mt-2">
+                        {field.value?.map(p => (
+                          <Badge key={p} variant="secondary" className="text-xs">
+                            {p}
+                          </Badge>
+                        ))}
+                      </div>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -342,8 +379,8 @@ export default function CreateCampaign() {
                   <span className="font-medium">{pendingData.city}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Partner:</span>
-                  <span className="font-medium">{pendingData.partner}</span>
+                  <span className="text-muted-foreground">Channels:</span>
+                  <span className="font-medium">{pendingData.partners.length} selected</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Duration:</span>
