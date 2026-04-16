@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { useCampaignStore } from "@/lib/store";
+import { useToast } from "@/hooks/use-toast";
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -14,9 +15,29 @@ export default function AuthPage() {
   const [, setLocation] = useLocation();
   const setCurrentUserRole = useCampaignStore(state => state.setCurrentUserRole);
   const currentUserRole = useCampaignStore(state => state.currentUserRole);
+  const { toast } = useToast();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    let isValid = false;
+    if (currentUserRole === "Advertiser" && email === "adv@adsdelivered.com" && password === "advpass123") isValid = true;
+    else if (currentUserRole === "Print Vendor" && email === "print@adsdelivered.com" && password === "printpass123") isValid = true;
+    else if (currentUserRole === "Delivery Channel" && email === "channel@adsdelivered.com" && password === "channelpass123") isValid = true;
+    else if (currentUserRole === "Admin" && email === "admin@adsdelivered.com" && password === "adminpass123") isValid = true;
+
+    if (!isValid) {
+      toast({
+        title: "Invalid credentials",
+        description: "Please check your email and password for the selected role.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
     // Simulate auth delay
     setTimeout(() => {
@@ -27,9 +48,6 @@ export default function AuthPage() {
       else if (currentUserRole === "Admin") setLocation("/admin");
     }, 1000);
   };
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50/50 p-4">
