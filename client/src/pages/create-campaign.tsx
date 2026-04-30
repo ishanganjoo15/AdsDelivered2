@@ -45,17 +45,30 @@ import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 
 const CITIES = ["Bengaluru", "Mumbai", "Delhi", "Hyderabad", "Chennai"];
-const PARTNERS = ["Slay Coffee","Samosa Party","Potful","FreshMenu","Truffles","Boat","Mamaearth","Wakefit","Licious","Blue Tokai","Sugar Cosmetics","Wow Skin Science","The Man Company","Bombay Shaving Company","Snitch","Reliance Smart","More Retail","Spar India","Reliance Trends","Pantaloons","Dunzo","Porter","Shadowfax","Delhivery","Xpressbees","Flipkart","Amazon India","Meesho","Nykaa","Myntra","ITC","HUL","Tata Consumer","Britannia","Nestle India","Zepto","Blinkit","Swiggy","Zomato","WeWork India","Awfis","OYO","Treebo","Urban Company","NoBroker","MagicBricks","Housing.com","Rapido","Ola","Uber India"].sort((a, b) => a.localeCompare(b));
+const PARTNERS = ["Slay Coffee","Samosa Party","Potful","FreshMenu","Truffles","Boat","Mamaearth","Wakefit","Licious","Blue Tokai","Sugar Cosmetics","Wow Skin Science","The Man Company","Bombay Shaving Company","Snitch","Reliance Smart","More Retail","Spar India","Reliance Trends","Pantaloons","Dunzo","Porter","Shadowfax","Delhivery","Xpressbees","Flipkart","Amazon India","Meesho","Nykaa","Myntra","ITC","HUL","Tata Consumer","Britannia","Nestle India","Zepto","Blinkit","Swiggy","Zomato","WeWork India","Awfis","OYO","Treebo","Urban Company","NoBroker","MagicBricks","Housing.com","Rapido","Ola","Uber India", "Others"].sort((a, b) => {
+  if (a === "Others") return 1;
+  if (b === "Others") return -1;
+  return a.localeCompare(b);
+});
 
 const formSchema = z.object({
   name: z.string().min(3, "Campaign name must be at least 3 characters"),
   city: z.string().min(1, "Please select a city"),
   partners: z.array(z.string()).min(1, "Please select at least one delivery channel"),
+  otherChannel: z.string().optional(),
   dateRange: z.object({
     from: z.date(),
     to: z.date(),
   }).refine((data) => data.from && data.to, "Please select a start and end date"),
   creative: z.any().optional(), // We'll handle file validation manually for simplicity in this mockup
+}).refine((data) => {
+  if (data.partners.includes("Others") && (!data.otherChannel || data.otherChannel.trim() === "")) {
+    return false;
+  }
+  return true;
+}, {
+  message: "Please enter the other delivery channel name",
+  path: ["otherChannel"],
 });
 
 export default function CreateCampaign() {
@@ -118,11 +131,17 @@ export default function CreateCampaign() {
     const endDate = pendingData.dateRange.to;
     const durationDays = differenceInDays(endDate, startDate) + 1;
 
+    let finalPartners = [...pendingData.partners];
+    if (finalPartners.includes("Others") && pendingData.otherChannel) {
+      finalPartners = finalPartners.filter(p => p !== "Others");
+      finalPartners.push(pendingData.otherChannel);
+    }
+
     const newCampaign = {
       id: Math.random().toString(36).substr(2, 9),
       name: pendingData.name,
       city: pendingData.city,
-      deliveryPartner: pendingData.partners.join(", "),
+      deliveryPartner: finalPartners.join(", "),
       startDate: startDate.toISOString(),
       endDate: endDate.toISOString(),
       durationDays,
@@ -262,6 +281,22 @@ export default function CreateCampaign() {
                     </FormItem>
                   )}
                 />
+
+                {form.watch("partners")?.includes("Others") && (
+                  <FormField
+                    control={form.control}
+                    name="otherChannel"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Other Channel Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter channel name" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
 
                 <FormField
                   control={form.control}
