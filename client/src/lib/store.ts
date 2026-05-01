@@ -66,7 +66,7 @@ export const useCampaignStore = create<CampaignState>()(
     }),
     {
       name: "campaign-storage",
-      storage: createJSONStorage(() => sessionStorage), 
+      storage: createJSONStorage(() => localStorage), 
     }
   )
 );
