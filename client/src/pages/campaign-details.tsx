@@ -1,21 +1,45 @@
+import { useState } from "react";
 import { Layout } from "@/components/layout";
 import { useCampaignStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Calendar, MapPin, Clock, CheckCircle2, AlertCircle } from "lucide-react";
-import { Link, useRoute } from "wouter";
+import { ArrowLeft, Calendar, MapPin, Clock, CheckCircle2, AlertCircle, Trash2 } from "lucide-react";
+import { Link, useRoute, useLocation } from "wouter";
 import { format } from "date-fns";
 import NotFound from "./not-found";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export default function CampaignDetails() {
   const [, params] = useRoute("/campaigns/:id");
+  const [, setLocation] = useLocation();
+  const { toast } = useToast();
   const campaign = useCampaignStore((state) => state.getCampaign(params?.id || ""));
+  const deleteCampaign = useCampaignStore((state) => state.deleteCampaign);
+  
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   if (!campaign) {
     return <NotFound />;
   }
+
+  const handleDelete = () => {
+    deleteCampaign(campaign.id);
+    toast({
+      title: "Campaign deleted",
+      description: "The campaign has been successfully deleted.",
+    });
+    setLocation("/dashboard");
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -135,19 +159,47 @@ export default function CampaignDetails() {
             </CardContent>
           </Card>
 
-          <Card className="bg-primary/5 border-primary/10">
+          <Card className="border-destructive/20">
             <CardHeader>
-              <CardTitle className="text-primary text-lg">Need Help?</CardTitle>
+              <CardTitle className="text-destructive flex items-center gap-2">
+                <AlertCircle className="h-5 w-5" />
+                Danger Zone
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground mb-4">
-                Contact our support team if you need to make changes to this live campaign.
+                Deleting this campaign will remove it completely for all users and roles. This action cannot be undone.
               </p>
-              <Button variant="outline" className="w-full">Contact Support</Button>
+              <Button 
+                variant="destructive" 
+                className="w-full gap-2"
+                onClick={() => setShowDeleteModal(true)}
+              >
+                <Trash2 className="h-4 w-4" /> Delete Campaign
+              </Button>
             </CardContent>
           </Card>
         </div>
       </div>
+
+      <Dialog open={showDeleteModal} onOpenChange={setShowDeleteModal}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Campaign</DialogTitle>
+            <DialogDescription>
+              Are you absolutely sure you want to delete "{campaign.name}"? This action cannot be undone and the campaign will be permanently removed for all roles.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowDeleteModal(false)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={handleDelete}>
+              Yes, Delete Campaign
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Layout>
   );
 }

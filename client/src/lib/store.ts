@@ -20,6 +20,7 @@ interface CampaignState {
   currentUserRole: "Advertiser" | "Print Vendor" | "Delivery Channel" | "Admin";
   addCampaign: (campaign: Campaign) => void;
   updateCampaignStatus: (id: string, status: Campaign["status"]) => void;
+  deleteCampaign: (id: string) => void;
   getCampaign: (id: string) => Campaign | undefined;
   setCurrentUserRole: (role: "Advertiser" | "Print Vendor" | "Delivery Channel" | "Admin") => void;
 }
@@ -60,6 +61,10 @@ export const useCampaignStore = create<CampaignState>()(
           campaigns: state.campaigns.map((c) =>
             c.id === id ? { ...c, status } : c
           ),
+        })),
+      deleteCampaign: (id) =>
+        set((state) => ({
+          campaigns: state.campaigns.filter((c) => c.id !== id),
         })),
       getCampaign: (id) => get().campaigns.find((c) => c.id === id),
       setCurrentUserRole: (role) => set({ currentUserRole: role }),
