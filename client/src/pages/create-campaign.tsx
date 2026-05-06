@@ -338,9 +338,12 @@ export default function CreateCampaign() {
                             mode="range"
                             selected={field.value}
                             onSelect={field.onChange}
-                            disabled={(date) =>
-                              date < new Date(new Date().setHours(0, 0, 0, 0))
-                            }
+                            disabled={(date) => {
+                              const tenDaysAgo = new Date();
+                              tenDaysAgo.setDate(tenDaysAgo.getDate() - 10);
+                              tenDaysAgo.setHours(0, 0, 0, 0);
+                              return date < tenDaysAgo;
+                            }}
                             initialFocus
                           />
                         </PopoverContent>
