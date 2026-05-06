@@ -16,15 +16,9 @@ import { useEffect } from "react";
 function Router() {
   const [location, setLocation] = useLocation();
 
-  // Simple redirect to login if at root
-  useEffect(() => {
-    if (location === "/") {
-      setLocation("/login");
-    }
-  }, [location, setLocation]);
-
   return (
     <Switch>
+      <Route path="/" component={AuthPage} />
       <Route path="/login" component={AuthPage} />
       <Route path="/signup" component={AuthPage} />
       <Route path="/dashboard" component={Dashboard} />
