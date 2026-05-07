@@ -71,6 +71,15 @@ export default function AuthPage() {
     } else if (currentUserRole === "Admin" && email === "admin@adsdelivered.com" && password === "adminpass123") {
       isValid = true;
       userName = "System Admin";
+    } else if (currentUserRole === "Advertiser" && email === "adv@adsdelivered.com" && password === "advpass123") {
+      isValid = true;
+      userName = "Acme Corp";
+    } else if (currentUserRole === "Print Vendor" && email === "print@adsdelivered.com" && password === "printpass123") {
+      isValid = true;
+      userName = "Rapid Print";
+    } else if (currentUserRole === "Delivery Channel" && email === "channel@adsdelivered.com" && password === "channelpass123") {
+      isValid = true;
+      userName = "Fast Delivery Co";
     }
 
     if (!isValid) {
