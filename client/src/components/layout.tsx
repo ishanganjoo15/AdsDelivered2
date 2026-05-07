@@ -7,6 +7,10 @@ export function Sidebar() {
   const [location] = useLocation();
   const currentUserRole = useCampaignStore(state => state.currentUserRole);
   const currentUserEmail = useCampaignStore(state => state.currentUserEmail);
+  const currentUserName = useCampaignStore(state => state.currentUserName);
+  const users = useCampaignStore(state => state.users);
+
+  const displayUserName = currentUserName || users.find(u => u.email === currentUserEmail && u.role === currentUserRole)?.name || (currentUserRole === "Admin" ? "System Admin" : currentUserRole);
 
   const allLinks = [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ["Advertiser", "Delivery Channel", "Admin"] },
@@ -54,10 +58,10 @@ export function Sidebar() {
       <div className="border-t p-4">
         <div className="flex items-center gap-3 mb-4 px-2">
           <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xs font-bold">
-            {currentUserRole.substring(0, 2).toUpperCase()}
+            {displayUserName.substring(0, 2).toUpperCase()}
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-medium">{currentUserRole}</span>
+            <span className="text-sm font-medium">{displayUserName}</span>
             <span className="text-xs text-muted-foreground truncate max-w-[150px]">
               {currentUserEmail || (currentUserRole === "Advertiser" ? "adv@adsdelivered.com" :
                currentUserRole === "Print Vendor" ? "print@adsdelivered.com" :

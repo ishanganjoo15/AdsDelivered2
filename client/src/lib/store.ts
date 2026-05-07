@@ -29,12 +29,14 @@ interface CampaignState {
   users: User[];
   currentUserRole: "Advertiser" | "Print Vendor" | "Delivery Channel" | "Admin";
   currentUserEmail: string | null;
+  currentUserName: string | null;
   addCampaign: (campaign: Campaign) => void;
   updateCampaignStatus: (id: string, status: Campaign["status"]) => void;
   deleteCampaign: (id: string) => void;
   getCampaign: (id: string) => Campaign | undefined;
   setCurrentUserRole: (role: "Advertiser" | "Print Vendor" | "Delivery Channel" | "Admin") => void;
   setCurrentUserEmail: (email: string | null) => void;
+  setCurrentUserName: (name: string | null) => void;
   onboardUser: (user: User) => void;
 }
 
@@ -94,6 +96,7 @@ export const useCampaignStore = create<CampaignState>()(
       ],
       currentUserRole: "Advertiser",
       currentUserEmail: "adv@adsdelivered.com",
+      currentUserName: "Acme Corp",
       addCampaign: (campaign) =>
         set((state) => ({ campaigns: [...state.campaigns, campaign] })),
       updateCampaignStatus: (id, status) =>
@@ -109,6 +112,7 @@ export const useCampaignStore = create<CampaignState>()(
       getCampaign: (id) => get().campaigns.find((c) => c.id === id),
       setCurrentUserRole: (role) => set({ currentUserRole: role }),
       setCurrentUserEmail: (email) => set({ currentUserEmail: email }),
+      setCurrentUserName: (name) => set({ currentUserName: name }),
       onboardUser: (user) => 
         set((state) => ({ users: [...state.users, user] })),
     }),

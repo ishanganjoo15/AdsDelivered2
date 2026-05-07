@@ -18,6 +18,7 @@ export default function AuthPage() {
   const currentUserRole = useCampaignStore(state => state.currentUserRole);
   const onboardUser = useCampaignStore(state => state.onboardUser);
   const setCurrentUserEmail = useCampaignStore(state => state.setCurrentUserEmail);
+  const setCurrentUserName = useCampaignStore(state => state.setCurrentUserName);
   const users = useCampaignStore(state => state.users);
   
   const { toast } = useToast();
@@ -60,13 +61,16 @@ export default function AuthPage() {
 
     // Handle Login
     let isValid = false;
+    let userName = "";
     
     // Check against onboarded users
     const foundUser = users.find(u => u.email === email && u.password === password && u.role === currentUserRole);
     if (foundUser) {
       isValid = true;
+      userName = foundUser.name;
     } else if (currentUserRole === "Admin" && email === "admin@adsdelivered.com" && password === "adminpass123") {
       isValid = true;
+      userName = "System Admin";
     }
 
     if (!isValid) {
@@ -79,6 +83,7 @@ export default function AuthPage() {
     }
 
     setCurrentUserEmail(email);
+    setCurrentUserName(userName);
     setIsLoading(true);
     // Simulate auth delay
     setTimeout(() => {
