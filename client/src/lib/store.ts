@@ -117,7 +117,7 @@ export const useCampaignStore = create<CampaignState>()(
         set((state) => ({ users: [...state.users, user] })),
     }),
     {
-      name: "campaign-storage",
+      name: "campaign-storage-v2",
       storage: createJSONStorage(() => localStorage), 
     }
   )
