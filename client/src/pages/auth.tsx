@@ -17,6 +17,7 @@ export default function AuthPage() {
   const setCurrentUserRole = useCampaignStore(state => state.setCurrentUserRole);
   const currentUserRole = useCampaignStore(state => state.currentUserRole);
   const onboardUser = useCampaignStore(state => state.onboardUser);
+  const setCurrentUserEmail = useCampaignStore(state => state.setCurrentUserEmail);
   const users = useCampaignStore(state => state.users);
   
   const { toast } = useToast();
@@ -77,6 +78,7 @@ export default function AuthPage() {
       return;
     }
 
+    setCurrentUserEmail(email);
     setIsLoading(true);
     // Simulate auth delay
     setTimeout(() => {

@@ -6,6 +6,7 @@ import { useCampaignStore } from "@/lib/store";
 export function Sidebar() {
   const [location] = useLocation();
   const currentUserRole = useCampaignStore(state => state.currentUserRole);
+  const currentUserEmail = useCampaignStore(state => state.currentUserEmail);
 
   const allLinks = [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ["Advertiser", "Delivery Channel", "Admin"] },
@@ -57,11 +58,11 @@ export function Sidebar() {
           </div>
           <div className="flex flex-col">
             <span className="text-sm font-medium">{currentUserRole}</span>
-            <span className="text-xs text-muted-foreground">
-              {currentUserRole === "Advertiser" ? "adv@adsdelivered.com" :
+            <span className="text-xs text-muted-foreground truncate max-w-[150px]">
+              {currentUserEmail || (currentUserRole === "Advertiser" ? "adv@adsdelivered.com" :
                currentUserRole === "Print Vendor" ? "print@adsdelivered.com" :
                currentUserRole === "Delivery Channel" ? "channel@adsdelivered.com" :
-               "admin@adsdelivered.com"}
+               "admin@adsdelivered.com")}
             </span>
           </div>
         </div>
