@@ -15,14 +15,24 @@ export interface Campaign {
   launchedAt?: string;
 }
 
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: "Advertiser" | "Print Vendor" | "Delivery Channel";
+  createdAt: string;
+}
+
 interface CampaignState {
   campaigns: Campaign[];
+  users: User[];
   currentUserRole: "Advertiser" | "Print Vendor" | "Delivery Channel" | "Admin";
   addCampaign: (campaign: Campaign) => void;
   updateCampaignStatus: (id: string, status: Campaign["status"]) => void;
   deleteCampaign: (id: string) => void;
   getCampaign: (id: string) => Campaign | undefined;
   setCurrentUserRole: (role: "Advertiser" | "Print Vendor" | "Delivery Channel" | "Admin") => void;
+  onboardUser: (user: User) => void;
 }
 
 export const useCampaignStore = create<CampaignState>()(
@@ -53,6 +63,29 @@ export const useCampaignStore = create<CampaignState>()(
           createdAt: "2024-02-20T14:30:00Z",
         }
       ],
+      users: [
+        {
+          id: "u1",
+          name: "Acme Corp",
+          email: "adv@adsdelivered.com",
+          role: "Advertiser",
+          createdAt: "2024-01-10T10:00:00Z",
+        },
+        {
+          id: "u2",
+          name: "Rapid Print",
+          email: "print@adsdelivered.com",
+          role: "Print Vendor",
+          createdAt: "2024-01-12T11:00:00Z",
+        },
+        {
+          id: "u3",
+          name: "Fast Delivery Co",
+          email: "channel@adsdelivered.com",
+          role: "Delivery Channel",
+          createdAt: "2024-01-15T09:00:00Z",
+        }
+      ],
       currentUserRole: "Advertiser",
       addCampaign: (campaign) =>
         set((state) => ({ campaigns: [...state.campaigns, campaign] })),
@@ -68,6 +101,8 @@ export const useCampaignStore = create<CampaignState>()(
         })),
       getCampaign: (id) => get().campaigns.find((c) => c.id === id),
       setCurrentUserRole: (role) => set({ currentUserRole: role }),
+      onboardUser: (user) => 
+        set((state) => ({ users: [...state.users, user] })),
     }),
     {
       name: "campaign-storage",
