@@ -19,6 +19,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
+  password?: string;
   role: "Advertiser" | "Print Vendor" | "Delivery Channel";
   createdAt: string;
 }
@@ -68,6 +69,7 @@ export const useCampaignStore = create<CampaignState>()(
           id: "u1",
           name: "Acme Corp",
           email: "adv@adsdelivered.com",
+          password: "advpass123",
           role: "Advertiser",
           createdAt: "2024-01-10T10:00:00Z",
         },
@@ -75,6 +77,7 @@ export const useCampaignStore = create<CampaignState>()(
           id: "u2",
           name: "Rapid Print",
           email: "print@adsdelivered.com",
+          password: "printpass123",
           role: "Print Vendor",
           createdAt: "2024-01-12T11:00:00Z",
         },
@@ -82,6 +85,7 @@ export const useCampaignStore = create<CampaignState>()(
           id: "u3",
           name: "Fast Delivery Co",
           email: "channel@adsdelivered.com",
+          password: "channelpass123",
           role: "Delivery Channel",
           createdAt: "2024-01-15T09:00:00Z",
         }

@@ -17,6 +17,7 @@ export default function AuthPage() {
   const setCurrentUserRole = useCampaignStore(state => state.setCurrentUserRole);
   const currentUserRole = useCampaignStore(state => state.currentUserRole);
   const onboardUser = useCampaignStore(state => state.onboardUser);
+  const users = useCampaignStore(state => state.users);
   
   const { toast } = useToast();
 
@@ -38,6 +39,7 @@ export default function AuthPage() {
           id: Math.random().toString(36).substr(2, 9),
           name,
           email,
+          password,
           role: onboardRole,
           createdAt: new Date().toISOString(),
         });
@@ -57,10 +59,14 @@ export default function AuthPage() {
 
     // Handle Login
     let isValid = false;
-    if (currentUserRole === "Advertiser" && email === "adv@adsdelivered.com" && password === "advpass123") isValid = true;
-    else if (currentUserRole === "Print Vendor" && email === "print@adsdelivered.com" && password === "printpass123") isValid = true;
-    else if (currentUserRole === "Delivery Channel" && email === "channel@adsdelivered.com" && password === "channelpass123") isValid = true;
-    else if (currentUserRole === "Admin" && email === "admin@adsdelivered.com" && password === "adminpass123") isValid = true;
+    
+    // Check against onboarded users
+    const foundUser = users.find(u => u.email === email && u.password === password && u.role === currentUserRole);
+    if (foundUser) {
+      isValid = true;
+    } else if (currentUserRole === "Admin" && email === "admin@adsdelivered.com" && password === "adminpass123") {
+      isValid = true;
+    }
 
     if (!isValid) {
       toast({
