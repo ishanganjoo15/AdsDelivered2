@@ -152,10 +152,6 @@ export default function CampaignDetails() {
                 <span className="text-muted-foreground">Total Days</span>
                 <span className="font-medium">{campaign.durationDays}</span>
               </div>
-              <div className="flex justify-between items-center py-2">
-                <span className="text-muted-foreground">Created</span>
-                <span className="font-medium">{format(new Date(campaign.createdAt), "MMM d, yyyy")}</span>
-              </div>
             </CardContent>
           </Card>
 

@@ -68,9 +68,6 @@ export default function Dashboard() {
                     <Calendar className="h-3.5 w-3.5" />
                     <span>{campaign.durationDays} days</span>
                   </div>
-                  <span className="text-xs text-muted-foreground">
-                    {format(new Date(campaign.createdAt), "MMM d, yyyy")}
-                  </span>
                 </div>
               </CardContent>
             </Card>

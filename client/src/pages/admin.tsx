@@ -76,7 +76,6 @@ export default function AdminPage() {
                   <TableHead>City</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Duration</TableHead>
-                  <TableHead>Created</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -100,7 +99,6 @@ export default function AdminPage() {
                       </Badge>
                     </TableCell>
                     <TableCell>{campaign.durationDays} days</TableCell>
-                    <TableCell>{format(new Date(campaign.createdAt), "MMM d, yyyy")}</TableCell>
                     <TableCell className="text-right">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
